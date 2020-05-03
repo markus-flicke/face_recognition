@@ -89,47 +89,34 @@ def get_background_extracted_images(img):
     return valid_cropped_images
 
 
-def get_detected_faces(img, frontal_classifier, profile_classifier, config, path, name):
+def get_detected_faces(img, frontal_classifier, profile_classifier, out_path, name):
     """
     Detects the faces in the cut out images, marks them in the resulting image with a green rectangle and saves them seperately.
 
     :param img: ndarray - The image to detect faces.
     :param frontal_classifier: The Casscade Classifier to detect frontal faces.
     :param profile_classifier: The Casscade Classifier to detect faces in profile.
-    :param config: dictionary - The configuration of the config file.
     :param path: Path to where the detected faces should be stored.
     :param name: Notation of the current image.
     :return:
     """
 
-    scale = config.getfloat('FaceDetection', 'ScaleFactor')
-    neighbors = config.getint('FaceDetection', 'Neighbors')
-    if not scale or not neighbors:
-        sys.exit("Error in the config file!")
+    scale = 1.2 # config.getfloat('FaceDetection', 'ScaleFactor')
+    neighbors = 5 # config.getint('FaceDetection', 'Neighbors')
 
     faces_list = fd.detect_faces(img, frontal_classifier, profile_classifier, scale, neighbors)
 
     if faces_list:
-        faces_path = path + '/faces/'
-        
-        if not os.path.exists(faces_path):
-            os.makedirs(faces_path)
+
+        if not os.path.exists(out_path):
+            os.makedirs(out_path)
 
         j = 0
         for (x, y, w, h) in faces_list:
             sub_face = img[y:y+h, x:x+w]
-            cv2.imwrite(faces_path + name + '_' + str(j) + ".png", sub_face)
+            cv2.imwrite(out_path + name + '_' + str(j) + ".png", sub_face)
             j += 1
 
-        with open(faces_path + name + ".csv", 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile, delimiter=",")
-            writer.writerow(["x", "y", "width", "height"])
-            for row in faces_list:
-                writer.writerow(row)
-
-        fd.mark_faces(img, faces_list)
-
-    return
 
 
 def main(args, config):
@@ -150,11 +137,11 @@ def main(args, config):
         full_name = os.path.basename(args.image)
         name = os.path.splitext(full_name)[0]
 
-        cropped_images = get_background_extracted_images(img, config)
+        cropped_images = get_background_extracted_images(img)
 
         for i, image in enumerate(cropped_images):
 
-            img = get_frame_extracted_image(image, config)
+            img = get_frame_extracted_image(image)
 
             if args.face:
 
