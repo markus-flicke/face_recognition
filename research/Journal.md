@@ -1,15 +1,15 @@
 ### Plans
 1. Determine the similarity between the cropped faces
-    * Use face_recoginition python module
+    * Bigger test on lbp_hog
+    * Try face_recoginition python module
 
 
 ----------
 07.05.2020
-
-
-
-
-
+* Vertical test of Local Binary Patterns with Histogram Oriented Gradients
+    * Successfully predicted 2/2
+* Needed to install opencv as follows:
+    * `pip3 install opencv-contrib-python`
 
 
 ----------

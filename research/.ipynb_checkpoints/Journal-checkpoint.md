@@ -5,8 +5,8 @@
 
 ----------
 07.05.2020
-
-
+* Needed to install opencv as follows:
+    * `pip3 install opencv-contrib-python`
 
 
 
