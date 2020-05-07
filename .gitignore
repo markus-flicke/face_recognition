@@ -1,3 +1,5 @@
 *.tif
 *.png
 *.jpg
+.idea/*
+*.pdf

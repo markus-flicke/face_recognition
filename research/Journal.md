@@ -2,6 +2,16 @@
 1. Determine the similarity between the cropped faces
     * Use face_recoginition python module
 
+
+----------
+07.05.2020
+
+
+
+
+
+
+
 ----------
 03.05.2020
 * Crop faces from pictures
