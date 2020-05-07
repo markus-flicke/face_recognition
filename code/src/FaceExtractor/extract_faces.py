@@ -1,24 +1,52 @@
 import src.Config as Config
 import cv2
 import os
-from src.FotoExtractor.main import get_detected_faces
 import logging
-
+import src.FaceExtractor.facedetection as fd
 
 class NoImageReadException(Exception):
     "If a file in the photos path cannot be read"
 
 
-def extract_faces(photo_filepath, out_path=Config.EXTRACTED_FACES_PATH):
+def get_detected_faces(img, frontal_classifier, profile_classifier, out_path, name):
+    """
+    Detects the faces in the cut out images, marks them in the resulting image with a green rectangle and saves them seperately.
+
+    :param img: ndarray - The image to detect faces.
+    :param frontal_classifier: The Casscade Classifier to detect frontal faces.
+    :param profile_classifier: The Casscade Classifier to detect faces in profile.
+    :param path: Path to where the detected faces should be stored.
+    :param name: Notation of the current image.
+    :return:
+    """
+
+    scale = 1.2 # config.getfloat('FaceDetection', 'ScaleFactor')
+    neighbors = 5 # config.getint('FaceDetection', 'Neighbors')
+
+    faces_list = fd.detect_faces(img, frontal_classifier, profile_classifier, scale, neighbors)
+
+    if faces_list:
+
+        if not os.path.exists(out_path):
+            os.makedirs(out_path)
+
+        j = 0
+        for (x, y, w, h) in faces_list:
+            sub_face = img[y:y+h, x:x+w]
+            cv2.imwrite(out_path + name + '_' + str(j) + ".png", sub_face)
+            j += 1
+
+
+def extract_faces(photo_filepath, out_dir=Config.EXTRACTED_FACES_PATH):
     """
     Crops all faces on a png photo and saves them to individual png files.
     :param photo_filepath:
-    :param out_path:
+    :param out_dir:
     :return:
     """
     # Skipping photos that have already been extracted
     in_filename = os.path.split(photo_filepath)[-1].split('.')[0]
-    if f'{in_filename}_0.png' in os.listdir(out_path):
+    if f'{in_filename}_0.png' in os.listdir(out_dir):
         logging.debug(f'No Face extraction necessary. Faces already extracted from photo: {in_filename}')
         return
 
@@ -32,7 +60,7 @@ def extract_faces(photo_filepath, out_path=Config.EXTRACTED_FACES_PATH):
     get_detected_faces(img,
                        frontal_classifier,
                        profile_classifier,
-                       os.path.join(out_path, ''), photo_filepath.split('.')[-2])
+                       os.path.join(out_dir, ''), photo_filepath.split('.')[-2])
 
 
 if __name__ == '__main__':
