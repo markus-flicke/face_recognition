@@ -3,3 +3,5 @@
 *.jpg
 .idea/*
 *.pdf
+code/src/FaceExtractor/__pycache__/*
+*.xlsx

@@ -1,3 +1,14 @@
+### Labels
+* Write an Excel file
+    * Three columns
+        * filename, image, label
+
+### Testing
+* Train test split
+    * Cross validation
+        * Leave one out CV
+
+
 ### Plans
 1. Determine the similarity between the cropped faces
     * Bigger test on lbp_hog
