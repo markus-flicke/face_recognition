@@ -5,6 +5,11 @@ from src.FotoExtractor.extract_images import extract_images
 
 
 def extrac_all_faces_from_all_albums():
+    """
+    Extracts all photos and then all faces from all album pages in dat/album_pages
+    Not sure if the numbering is deterministic. Better to not rerun this method to keep the dataset constant
+    :return:
+    """
     Config.setup_logging()
     # Extract images from album pages
     in_path = './dat/album_pages/'
@@ -19,4 +24,4 @@ def extrac_all_faces_from_all_albums():
 
 
 if __name__=='__main__':
-    extrac_all_faces_from_all_albums()
+    pass

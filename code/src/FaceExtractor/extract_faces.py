@@ -20,20 +20,18 @@ def get_detected_faces(img, frontal_classifier, profile_classifier, out_path, na
     :return:
     """
 
-    scale = 1.2 # config.getfloat('FaceDetection', 'ScaleFactor')
-    neighbors = 5 # config.getint('FaceDetection', 'Neighbors')
+    scale = 1.2
+    neighbors = 5
 
     faces_list = fd.detect_faces(img, frontal_classifier, profile_classifier, scale, neighbors)
 
     if faces_list:
-
-        if not os.path.exists(out_path):
-            os.makedirs(out_path)
-
         j = 0
         for (x, y, w, h) in faces_list:
             sub_face = img[y:y+h, x:x+w]
-            cv2.imwrite(out_path + name + '_' + str(j) + ".png", sub_face)
+            filepath = os.path.join(out_path, name + '_' + str(j) + ".png")
+            cv2.imwrite(filepath, sub_face)
+            logging.debug(f'Face extracted: {filepath}')
             j += 1
 
 
@@ -60,7 +58,7 @@ def extract_faces(photo_filepath, out_dir=Config.EXTRACTED_FACES_PATH):
     get_detected_faces(img,
                        frontal_classifier,
                        profile_classifier,
-                       os.path.join(out_dir, ''), photo_filepath.split('.')[-2])
+                       os.path.join(out_dir, ''), os.path.split(photo_filepath)[-1].split('.')[-2])
 
 
 if __name__ == '__main__':
