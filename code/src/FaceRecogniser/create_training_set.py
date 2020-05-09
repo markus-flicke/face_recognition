@@ -1,15 +1,13 @@
 # https://github.com/AsankaD7/Face-Recognition-Train-YML-Python/blob/master/trainer.py
 import os
 from cv2.face import LBPHFaceRecognizer_create
-import cv2
+
 import numpy as np
 from PIL import Image
 from src import  Config
 
 
 def getImages(training_filenames):
-    # training_filenames = ['02_3_1.png', '02_1_0.png', '02_0_2.png', '01_3_0.png', '01_4_0.png', '02_4_0.png']
-    # 02_4_1.png is also a positive, but used for testing
     path = Config.EXTRACTED_FACES_PATH
     imagePaths=[os.path.join(path,f) for f in training_filenames]
     faces=[]
@@ -18,6 +16,13 @@ def getImages(training_filenames):
         faceNp=np.array(faceImg,'uint8')
         faces.append(faceNp)
     return faces
+
+def create_training_set(training_filenames, training_labels):
+    recognizer = LBPHFaceRecognizer_create()
+    faces=getImages(training_filenames)
+    recognizer.train(faces, np.array(training_labels))
+    recognizer.save(os.path.join('dat', 'training.yml'))
+
 
 if __name__=='__main__':
     recognizer = LBPHFaceRecognizer_create()

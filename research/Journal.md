@@ -1,19 +1,39 @@
-### Labels
-* Write an Excel file
+### Iterative training
+* Give the first picture a class
+* For the next picture
+    * What is the most similar picture?
+    * What is your confidence
+    * If confidence is high, assign the predicted label
+    * If confidence is low, assign a new label
+* Repeat
+
+
+
+### ToDos
+* Don't write the training set to disk all the time
+
+
+
+----------
+09.05.2020
+* Eigenfaces and Fisherfaces are not easy to train
+    * They expect square images
+* Testing
+    * Mediocre results for lbd_hog, as accuracy is roughly 35%
+        * Actually removing duplicates was not fully successful
+        * Hence the accuracy should be even lower
+            * Maybe 10%
+    * Leave one out CV
+        * Can only be done with people that appear at least twice
+            * And that don't appear twice on the same picture
+                * The legacy code occasionally yields duplicates
+            * Introduced a cleaning step that removes duplicates based on labels
+
+----------
+08.05.2020
+* Wrote an Excel file for labelling
     * Three columns
         * filename, image, label
-
-### Testing
-* Train test split
-    * Cross validation
-        * Leave one out CV
-
-
-### Plans
-1. Determine the similarity between the cropped faces
-    * Bigger test on lbp_hog
-    * Try face_recoginition python module
-
 
 ----------
 07.05.2020
