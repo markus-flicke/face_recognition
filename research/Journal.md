@@ -8,16 +8,37 @@
 * Repeat
 
 
+### Alternative research questions
+* We can study how image quality affects classification accuracy
+    * Explain how there are datasets (FIW) with classifiers of accuracy 99%
+        * But our baseline is 10% on A2
+    * Would be neat to know how much we can blame the dataset
+    * May lead to an accurate set of requirements for our software input
+        * We could say:
+            * A resolution of x corresponds to an accuracy decrease of y
+            * Shadows matter *this* much
+            * Black white photography matters *this* much
+            * Old camera defects matter *this* much
+            * Taking photos of photos matters *this* much
+            * Face occlusions matter *this* much
+    * It will also anser Andreas' inevitable question:
+        * Why doesn't it work (so well), guys?
+        * Did you just pick *the wrong* algorithm?
 
-### ToDos
-* Don't write the training set to disk all the time
+
+
+
+
+----------
+10.05.2020
+
 
 
 
 ----------
 09.05.2020
 * Eigenfaces and Fisherfaces are not easy to train
-    * They expect square images
+    * They expect images of equal shape
 * Testing
     * Mediocre results for lbd_hog, as accuracy is roughly 35%
         * Actually removing duplicates was not fully successful
@@ -41,7 +62,6 @@
     * Successfully predicted 2/2
 * Needed to install opencv as follows:
     * `pip3 install opencv-contrib-python`
-
 
 ----------
 03.05.2020

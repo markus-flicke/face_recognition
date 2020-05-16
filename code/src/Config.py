@@ -5,8 +5,10 @@ import sys
 
 FACE_FRONTAL_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'classifiers', 'haarcascade_frontalface.xml')
 FACE_PROFILE_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'classifiers', 'haarcascade_profileface.xml')
-EXTRACTED_FACES_PATH = os.path.join('dat', 'extracted_faces')
-EXTRACTED_PHOTOS_PATH = os.path.join('dat', 'extracted_photos')
+ANDREAS_ALBUMS_PATH = os.path.join('dat', 'AndreasAlbums')
+
+EXTRACTED_FACES_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_faces')
+EXTRACTED_PHOTOS_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_photos')
 
 
 # Logging configuration setup

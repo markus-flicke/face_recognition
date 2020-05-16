@@ -7,7 +7,13 @@ from PIL import Image
 from src import  Config
 
 
-def getImages(training_filenames):
+def _open_images(training_filenames):
+    """
+    Opens all images in trainig_filenames and returns them as a list.
+    If you run into RAM problems because of this, turn it into a generator.
+    :param training_filenames:
+    :return:
+    """
     path = Config.EXTRACTED_FACES_PATH
     imagePaths=[os.path.join(path,f) for f in training_filenames]
     faces=[]
@@ -17,11 +23,17 @@ def getImages(training_filenames):
         faces.append(faceNp)
     return faces
 
-def create_training_set(training_filenames, training_labels):
-    recognizer = LBPHFaceRecognizer_create()
-    faces=getImages(training_filenames)
-    recognizer.train(faces, np.array(training_labels))
-    recognizer.save(os.path.join('dat', 'training.yml'))
+def train_opencv_classifier(training_filenames, training_labels, classifier = LBPHFaceRecognizer_create()):
+    """
+    Trains an OpenCV classifier and saves it to yml.
+    :param training_filenames:
+    :param training_labels:
+    :return:
+    """
+    faces=_open_images(training_filenames)
+    classifier.train(faces, np.array(training_labels))
+    # The lbph face recogniser will be called 'opencv_lbphfaces'.
+    classifier.save(os.path.join('dat', '{}.yml'.format(classifier.getDefaultName())))
 
 
 if __name__=='__main__':
@@ -30,7 +42,5 @@ if __name__=='__main__':
     training_filenames = os.listdir(Config.EXTRACTED_FACES_PATH)
     for f in os.listdir(Config.EXTRACTED_FACES_PATH)[:10]:
         training_filenames.remove(f)
-    faces=getImages(training_filenames)
     training_labels = [1 if file in positive_filenames else 0 for file in training_filenames]
-    recognizer.train(faces,np.array(training_labels))
-    recognizer.save('training.yml')
+    train_opencv_classifier(training_filenames, training_labels, LBPHFaceRecognizer_create())

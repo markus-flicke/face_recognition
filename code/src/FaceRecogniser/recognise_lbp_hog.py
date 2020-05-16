@@ -3,14 +3,13 @@ from src import Config
 
 import cv2
 from cv2.face import LBPHFaceRecognizer_create
-from cv2.face import EigenFaceRecognizer_create
 
-def predict(img_filename='02_4_1.png'):
+def predict_lbph(img_filename):
     rec = LBPHFaceRecognizer_create()
-    trining_filepath = os.path.join('dat', 'training.yml')
-    if not os.path.isfile(trining_filepath):
+    training_filepath = os.path.join('dat', 'opencv_lbphfaces.yml')
+    if not os.path.isfile(training_filepath):
         raise FileNotFoundError('Training file not found!')
-    rec.read(trining_filepath)
+    rec.read(training_filepath)
     photo_filepath = os.path.join(Config.EXTRACTED_FACES_PATH, img_filename)
     img=cv2.imread(photo_filepath, cv2.IMREAD_COLOR)
     gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -20,5 +19,5 @@ def predict(img_filename='02_4_1.png'):
 
 if __name__=='__main__':
     for img_filename in os.listdir(Config.EXTRACTED_FACES_PATH):
-        id, conf = predict(img_filename)
+        id, conf = predict_lbph(img_filename)
         print(f'{img_filename}: {id} ({conf})')
