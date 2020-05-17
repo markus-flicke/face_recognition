@@ -10,6 +10,7 @@ ANDREAS_ALBUMS_PATH = os.path.join('dat', 'AndreasAlbums')
 EXTRACTED_FACES_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_faces')
 EXTRACTED_PHOTOS_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_photos')
 
+LFW_PATH = os.path.join('dat', 'lfw')
 
 # Logging configuration setup
 def setup_logging(logfile=os.path.join('log', 'face_recoginition.log')):

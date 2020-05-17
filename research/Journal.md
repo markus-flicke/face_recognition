@@ -26,12 +26,17 @@
         * Did you just pick *the wrong* algorithm?
 
 
-
+----------
+17.05.2020
+* LBPH accuracy on LFW: 73%
 
 
 ----------
-10.05.2020
-
+16.05.2020
+* LBPH Accuracy rose to 56% on A2
+    * Because I removed some wrong labels in the dataset
+        * Occasionally I was finding people to be the same even though they appeared on the same picture
+        * Occasionally I put people in the same calss by accident
 
 
 
