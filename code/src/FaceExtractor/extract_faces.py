@@ -3,6 +3,7 @@ import cv2
 import os
 import logging
 import src.FaceExtractor.facedetection as fd
+from pathlib import Path
 
 class NoImageReadException(Exception):
     "If a file in the photos path cannot be read"
@@ -21,9 +22,9 @@ def extract_faces(photo_filepath, out_dir=Config.EXTRACTED_FACES_PATH):
         logging.debug(f'No Face extraction necessary. Faces already extracted from photo: {in_filename}')
         return
 
-    frontal_classifier = cv2.CascadeClassifier(Config.FACE_FRONTAL_EXTRACTOR_CLASSIFIER_PATH)
-    profile_classifier = cv2.CascadeClassifier(Config.FACE_PROFILE_EXTRACTOR_CLASSIFIER_PATH)
-    img = cv2.imread(photo_filepath, cv2.IMREAD_COLOR)
+    frontal_classifier = cv2.CascadeClassifier("src/FaceExtractor/classifiers/haarcascade_frontalface.xml")
+    profile_classifier = cv2.CascadeClassifier("src/FaceExtractor/classifiers/haarcascade_profileface.xml")
+    img = cv2.imread(str(photo_filepath), cv2.IMREAD_COLOR)
     if img is None:
         raise NoImageReadException(
             f'Image reading failed for: {photo_filepath}')
@@ -31,7 +32,7 @@ def extract_faces(photo_filepath, out_dir=Config.EXTRACTED_FACES_PATH):
     _get_detected_faces(img,
                         frontal_classifier,
                         profile_classifier,
-                        os.path.join(out_dir, ''), os.path.split(photo_filepath)[-1].split('.')[-2])
+                        out_dir, os.path.split(photo_filepath)[-1].split('.')[-2])
 
 
 def _get_detected_faces(img, frontal_classifier, profile_classifier, out_path, name):
