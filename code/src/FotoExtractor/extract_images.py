@@ -21,6 +21,7 @@ def get_frame_extracted_image(img):
     img = re.remove_border(img, steps, max_window_size, offset)
     return img
 
+
 def get_background_extracted_images(img):
     """
     Approximately cuts out all the photos in the input image.
@@ -43,6 +44,11 @@ def get_background_extracted_images(img):
     valid_cropped_images = br.validate_cropped_images(cropped_images, feature_threshold)
     return valid_cropped_images
 
+
+class ExtractionException(Exception):
+    """No Image found"""
+
+
 def extract_images(image_path, out_path):
     """
     Extracts photos from an album picture into the output path.
@@ -50,10 +56,10 @@ def extract_images(image_path, out_path):
     :param out_path:
     :return:
     """
-    img = cv2.imread(image_path, cv2.IMREAD_COLOR)
 
+    img = cv2.imread(image_path, cv2.IMREAD_COLOR)
     if img is None:
-        sys.exit("Error no image found!")
+        raise ExtractionException(image_path)
 
     full_name = os.path.basename(image_path)
     name = os.path.splitext(full_name)[0]
@@ -69,7 +75,7 @@ def extract_images(image_path, out_path):
         cv2.imwrite(out_path + '/' + name + '_' + str(i) + '.png', img)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     in_path = './dat/album_pages/'
     out_path = './dat/extracted_photos'
     for album_page in os.listdir(in_path):

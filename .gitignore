@@ -6,3 +6,6 @@
 code/src/FaceExtractor/__pycache__/*
 *.xlsx
 code/dat/*
+*.iml
+*.log
+.idea\misc.xml

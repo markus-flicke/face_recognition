@@ -1,7 +1,7 @@
 import os
 from src import Config
 from src.FaceExtractor.extract_faces import extract_faces
-from src.FotoExtractor.extract_images import extract_images
+from src.FotoExtractor.extract_images import extract_images, ExtractionException
 
 
 def extrac_all_faces_from_all_albums():
@@ -12,16 +12,18 @@ def extrac_all_faces_from_all_albums():
     """
     Config.setup_logging()
     # Extract images from album pages
-    in_path = './dat/album_pages/'
-    out_path = './dat/extracted_photos'
+    in_path = Config.ALBUM2_PATH
+    out_path = Config.EXTRACTED_PHOTOS_PATH
     for album_page in os.listdir(in_path):
-        extract_images(in_path + album_page, out_path)
-
+        try:
+            extract_images(os.path.join(in_path, album_page), out_path)
+        except ExtractionException:
+            continue
     # Extract faces from images
     for in_filename in os.listdir(Config.EXTRACTED_PHOTOS_PATH):
         if not in_filename.endswith('.png'): continue
         extract_faces(os.path.join(Config.EXTRACTED_PHOTOS_PATH, in_filename))
 
 
-if __name__=='__main__':
-    pass
+if __name__ == '__main__':
+    extrac_all_faces_from_all_albums()
