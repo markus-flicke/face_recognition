@@ -8,4 +8,4 @@ code/src/FaceExtractor/__pycache__/*
 code/dat/*
 *.iml
 *.log
-.idea\misc.xml
+.idea/misc.xml
