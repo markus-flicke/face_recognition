@@ -42,20 +42,3 @@ def detect_faces(img, frontal_classifier, profile_classifier, scale,
     frontal_list.extend(profile_list)
 
     return frontal_list
-
-
-def mark_faces(img, faces_list):
-    """
-    The found faces in the list of faces are marked with a green rectangle in the image.
-
-    :param img: ndarray - The image to mark the faces.
-    :param faces_list: array - The detected faces in the image.
-    :return: The image with the marked faces.
-    :rtype ndarray
-    """
-
-    if faces_list:
-        for (x, y, w, h) in faces_list:
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-    return img
