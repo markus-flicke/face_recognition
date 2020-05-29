@@ -29,7 +29,9 @@
 ----------
 17.05.2020
 * LBPH accuracy on LFW: 73%
-
+* LFW benchmark was phrased as 99.38% accuracy on predicting if two faces are the same or not
+* Without altering face_recogniser code a naive approach was implemented
+    * Binary search
 
 ----------
 16.05.2020

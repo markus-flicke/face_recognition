@@ -5,9 +5,6 @@ from src import Config
 def extract_lfw_faces(filepath):
     """
     Extracting with the general extract method,
-
-
-
     but keeping the convention that extracted faces go into a subfolder in lfw.
     :param filepath:
     :return:

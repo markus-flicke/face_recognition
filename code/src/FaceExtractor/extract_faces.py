@@ -2,7 +2,7 @@ import src.Config as Config
 import cv2
 import os
 import logging
-import src.FaceExtractor.facedetection as fd
+import src.FaceExtractor.detect_faces as fd
 
 class NoImageReadException(Exception):
     "If a file in the photos path cannot be read"
