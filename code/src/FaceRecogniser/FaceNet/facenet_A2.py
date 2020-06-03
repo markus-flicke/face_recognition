@@ -1,21 +1,15 @@
-import sys
-
-from facenet_pytorch import MTCNN, InceptionResnetV1
+from src.FaceRecogniser.FaceNet.utils import *
 import torch
 import torchvision
 import csv
-import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torchvision import datasets
 import matplotlib.pyplot as plt
-from operator import itemgetter
 
 from sklearn.cluster import DBSCAN
-from imutils import build_montages
-import cv2
+from sklearn import metrics
 
 import numpy as np
-import pandas as pd
 import os
 
 workers = 0 if os.name == 'nt' else 4
@@ -30,140 +24,8 @@ image_size = 128
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print('Running on device: {}'.format(device))
 
-
-class Model:
-    ''' Für den Parameter model muss entweder der String "vggface2" oder "casia-webface" angegeben werden '''
-
-    def __init__(self, model):
-        self.resnet = InceptionResnetV1(pretrained=model).eval().to(device)
-
-
-def collate_fn(x):
-    return x[0]
-
-
-'''
-Berechnet die Top 3 predictions
-
-:dist: List Distanzmatrix NxN
-:name: List Label der Testdatensätze 1xN
-
-:return: List of tupel (ground_truth_label, [top_3_label]) 1xN
-'''
-
-
-def get_top3_predictions(dist, name):
-    top = []
-    for row in dist:
-        dist_class = zip(row, name)
-        dist_class = sorted(dist_class, key=itemgetter(0))
-        class_name = dist_class[0][1]
-        top1 = dist_class[1][1]
-        top2 = dist_class[2][1]
-        top3 = dist_class[3][1]
-        top.append((class_name, [top1, top2, top3]))
-
-    return top
-
-
-'''
-Berechnet ob das korrekte Label in den Tupeln steckt und berechnet die accuracy
-
-:top3: List of tupel (ground_truth_label, [top_3_label]) 1xN
-
-:return: Scalar accuracy
-'''
-
-
-def top3_accuracy(top3):
-    correct_predicts = 0
-    num_of_predictions = len(top3)
-
-    for el in top3:
-        class_name = el[0]
-        for c in el[1]:
-            if class_name == c:
-                correct_predicts += 1
-
-    return correct_predicts / num_of_predictions
-
-
-'''
-Berechnet die Confusion matrix
-
-:threshold: Scalar für den zu verwendeten Schwellenwert
-
-:return: Dict {class: value} für tp, fp, tn, fn
-'''
-
-
-def confusion_matrix(threshold, embeddings):
-    tp = dict(zip(classes, np.zeros(len(classes))))
-    tn = tp.copy()
-    fp = tp.copy()
-    fn = tp.copy()
-    for row in range(len(embeddings)):
-        for col in range(len(embeddings)):
-            current_class = names[row]
-            if row != col:
-                if dists[row][col] <= threshold:
-                    if current_class == names[col]:
-                        tp[current_class] += 1
-                    else:
-                        fp[current_class] += 1
-                else:
-                    if current_class == names[col]:
-                        fn[current_class] += 1
-                    else:
-                        tn[current_class] += 1
-    return tp, fp, fn, tn
-
-
-'''
-Berechnet Accuracy, Precicion und Recall für jede Klasse
-
-:tp, fp, fn, tn: Dict {class: value} für tp, fp, tn, fn
-
-:return: Dict {class: value} für Accuracy, Precicion und Recall 
-'''
-
-
-def classification_meassures(tp, fp, fn, tn):
-    accuracies = dict(zip(classes, np.zeros(len(classes))))
-    precicions = accuracies.copy()
-    recalls = accuracies.copy()
-    for key in accuracies:
-        accuracies[key] = (tp[key] + tn[key]) / (fp[key] + fn[key] + tp[key] + tn[key])
-        precicions[key] = tp[key] / (tp[key] + fp[key])
-        recalls[key] = tp[key] / (tp[key] + fn[key])
-
-    return accuracies, precicions, recalls
-
-
-'''
-Berechnen von tpr und fpr für die ROC-Kurve
-'''
-
-
-def compute_tpr_fpr(thresh):
-    tpr = dict(zip(classes, np.zeros(len(classes))))
-    tprs = []
-    fpr = tpr.copy()
-    fprs = []
-
-    for t in thresh:
-        tp, fp, fn, tn = confusion_matrix(t, embeddings)
-        for key in tpr:
-            tpr[key] = tp[key] / (tp[key] + fn[key])
-            tprs.append(np.nanmean(np.array(list(tpr.values()))))
-            fpr[key] = fp[key] / (fp[key] + tn[key])
-            fprs.append(np.nanmean(np.array(list(fpr.values()))))
-
-    return tprs, fprs
-
-
-# Dantensatz (ausgeschnittene Gesichter) wird geladen und auf die richtige Größe gebracht
-dataset = datasets.ImageFolder('../../dat/AndreasAlbums/extracted_faces/'
+# Datensatz (ausgeschnittene Gesichter) wird geladen und auf die richtige Größe gebracht
+dataset = datasets.ImageFolder('../../../dat/AndreasAlbums/extracted_faces/'
                                , transform=torchvision.transforms.Resize((image_size, image_size))
                                )
 dataset.idx_to_class = {i: c for c, i in dataset.class_to_idx.items()}
@@ -173,7 +35,7 @@ aligned = []
 names = []
 
 # Lesen der Labels
-with open('../../dat/AndreasAlbums/labels.csv') as csv_file:
+with open('../../../dat/AndreasAlbums/labels.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     for row in csv_reader:
         names.append(row[1])
@@ -191,7 +53,7 @@ embeddings = []
 step_size = 10
 # Initialisieren des Netzwerkes
 # Für den Parameter model muss entweder der String "vggface2" oder "casia-webface" angegeben werden
-resnet = Model('casia-webface').resnet
+resnet = Model('vggface2', device).resnet
 
 # Berechnen der Embeddings pro Batch. Batch-Größe wird über step_size angegben
 for i in range(0, len(aligned), step_size):
@@ -218,8 +80,8 @@ print('top 3 accuracy: {:.2f}'.format(top3_acc))
 dist_thresh = 0.01
 
 # Bestimmen von Accuracy, Precision, Recall und F1 aus der Confusion-Matrix
-tp, fp, fn, tn = confusion_matrix(dist_thresh, embeddings)
-accuracies, precicions, recalls = classification_meassures(tp, fp, fn, tn)
+tp, fp, fn, tn = confusion_matrix(dist_thresh, embeddings, classes, names, dists)
+accuracies, precicions, recalls = classification_meassures(tp, fp, fn, tn, classes)
 
 accuracy = np.nanmean(np.array(list(accuracies.values())))
 precicion = np.nanmean(np.array(list(precicions.values())))
@@ -232,7 +94,50 @@ print('Recall {:.2f}'.format(recall))
 print('F1-Score {:.2f}'.format(f1))
 
 # Plotten der ROC-Kurve
-th = np.linspace(0, 1.5, 100)
-tpr, fpr = compute_tpr_fpr(th)
-plt.plot(fpr, tpr)
+# th = np.linspace(0, 1.5, 100)
+# tpr, fpr = compute_tpr_fpr(th, classes, embeddings, names, dists)
+# plt.plot(fpr, tpr)
+# plt.show()
+
+# DBSCAN Test
+db = DBSCAN(eps=0.2, min_samples=1).fit(embeddings)
+core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+core_samples_mask[db.core_sample_indices_] = True
+labels = db.labels_
+labels_true = names
+
+n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+n_noise_ = list(labels).count(-1)
+
+print('DBSCAN Results:')
+print('Estimated number of clusters: %d' % n_clusters_)
+print('Estimated number of noise points: %d' % n_noise_)
+print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
+print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
+print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
+print("Adjusted Rand Index: %0.3f"
+      % metrics.adjusted_rand_score(labels_true, labels))
+print("Adjusted Mutual Information: %0.3f"
+      % metrics.adjusted_mutual_info_score(labels_true, labels))
+
+# Black removed and is used for noise instead.
+unique_labels = set(labels)
+colors = [plt.cm.Spectral(each)
+          for each in np.linspace(0, 1, len(unique_labels))]
+for k, col in zip(unique_labels, colors):
+    if k == -1:
+        # Black used for noise.
+        col = [0, 0, 0, 1]
+
+    class_member_mask = (labels == k)
+
+    xy = embeddings[class_member_mask & core_samples_mask]
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+             markeredgecolor='k', markersize=14)
+
+    xy = embeddings[class_member_mask & ~core_samples_mask]
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+             markeredgecolor='k', markersize=6)
+
+plt.title('Estimated number of clusters: %d' % n_clusters_)
 plt.show()
