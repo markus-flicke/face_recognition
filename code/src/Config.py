@@ -9,6 +9,7 @@ FACE_PROFILE_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'c
                                                       'haarcascade_profileface.xml')
 ANDREAS_ALBUMS_PATH = os.path.join('dat', 'AndreasAlbums')
 ALBUM2_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'A2')
+LABELS_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'labels.csv')
 
 EXTRACTED_FACES_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_faces')
 EXTRACTED_PHOTOS_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_photos')
