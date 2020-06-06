@@ -10,13 +10,6 @@ from sklearn.metrics import accuracy_score, recall_score
 import numpy as np
 import Config
 import cv2
-import tensorflow as tf
-from clustering import cluster
-import glob
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-from matplotlib.pyplot import imshow
-import DataLoader.load_A2 as a2loader
 
 
 def predictVGG(face_images):
@@ -25,6 +18,22 @@ def predictVGG(face_images):
     embeddings = model.predict(face_image_array)
     return np.squeeze(embeddings) # remove unnecessary dimensions
 
+
+def get_vgg_embeddings(face_paths):
+    face_list = []
+    # prepare faces for prediction
+    for idx, face_path in enumerate(face_paths):
+        # read image
+        face = cv2.imread(face_path)
+        # resize Image
+        face_dim = (faceSize, faceSize)
+        resized_face = cv2.resize(face, dsize=face_dim, interpolation=cv2.INTER_CUBIC)
+        face_list.append(resized_face)
+
+    # VGG
+    vgg_embeddings = vgg2.predictVGG(face_list)  # returns embeddings as ndarray of shape (imageCount, embeddingSize)
+
+    return vgg_embeddings
 
 # %%
 
