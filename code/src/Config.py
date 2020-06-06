@@ -3,6 +3,8 @@ import logging
 # Face Extractor
 import sys
 
+face_image_size = 200
+
 FACE_FRONTAL_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'classifiers',
                                                       'haarcascade_frontalface.xml')
 FACE_PROFILE_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'classifiers',
