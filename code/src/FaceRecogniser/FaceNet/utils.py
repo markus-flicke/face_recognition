@@ -10,10 +10,6 @@ class Model:
         self.resnet = InceptionResnetV1(pretrained=model).eval().to(device)
 
 
-def collate_fn(x):
-    return x[0]
-
-
 '''
 Berechnet die Top 3 predictions
 
