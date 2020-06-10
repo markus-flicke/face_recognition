@@ -2,5 +2,5 @@ pandas
 sklearn
 facenet_pytorch
 git+https://github.com/JohannesZahn/keras-vggface.git
-tensorflow==1.14.0
+tensorflow
 keras == 2.2.4
