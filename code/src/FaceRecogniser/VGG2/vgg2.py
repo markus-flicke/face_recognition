@@ -5,38 +5,45 @@ import pandas as pd
 import os
 import sklearn
 from keras_vggface.vggface import VGGFace
+from keras_vggface import utils
 from scipy.spatial.distance import cosine
 from sklearn.metrics import accuracy_score, recall_score
 import numpy as np
-import Config
+from src import Config
 import cv2
+from keras.preprocessing import image
 
+face_size = 224
 
-def predictVGG(face_images):
-    model = VGGFace(model='resnet50', include_top=False, input_shape=(Config.face_image_size,Config.face_image_size,3))
+def predictVGG(face_images, model):
+    model = VGGFace(model=model, include_top=False,
+                    input_shape=(face_size, face_size, 3))
     face_image_array = np.stack(face_images, axis=0)
     embeddings = model.predict(face_image_array)
-    return np.squeeze(embeddings) # remove unnecessary dimensions
+    return np.squeeze(embeddings)  # remove unnecessary dimensions
 
 
-def get_vgg_embeddings(face_paths):
+def get_vgg_embeddings(face_paths, model):
     face_list = []
     # prepare faces for prediction
     for idx, face_path in enumerate(face_paths):
         # read image
-        face = cv2.imread(face_path)
+        face = image.load_img(face_path, target_size=(face_size, face_size))
+        face = image.img_to_array(face)
+        face = np.expand_dims(face, axis=0)
+        face = utils.preprocess_input(face, version=2)  # or version=2
+        # face = cv2.imread(face_path)
         # resize Image
-        face_dim = (faceSize, faceSize)
-        resized_face = cv2.resize(face, dsize=face_dim, interpolation=cv2.INTER_CUBIC)
-        face_list.append(resized_face)
+        # face_dim = (face_size, face_size)
+        # resized_face = cv2.resize(face, dsize=face_dim, interpolation=cv2.INTER_CUBIC)
+        face_list.append(np.squeeze(face))
 
     # VGG
-    vgg_embeddings = vgg2.predictVGG(face_list)  # returns embeddings as ndarray of shape (imageCount, embeddingSize)
+    vgg_embeddings = predictVGG(face_list, model)  # returns embeddings as ndarray of shape (imageCount, embeddingSize)
 
     return vgg_embeddings
 
 # %%
-
 
 
 # %%

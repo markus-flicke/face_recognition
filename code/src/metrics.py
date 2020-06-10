@@ -1,5 +1,6 @@
 from operator import itemgetter
 import numpy as np
+from scipy.spatial.distance import cosine
 
 def threshold_metrics(dist_thresh, dist_matrix, labels, embeddings):
     classes = np.sort(list(dict.fromkeys(labels)))
@@ -20,8 +21,12 @@ def threshold_metrics(dist_thresh, dist_matrix, labels, embeddings):
     print('F1-Score {:.2f}'.format(f1))
 
 
-def dist_matrix(embeddings):
+def dist_matrix_euclid(embeddings):
     dists = [[(np.linalg.norm(e1 - e2) ** 2) for e2 in embeddings] for e1 in embeddings]
+    return dists
+
+def dist_matrix_cosine(embeddings):
+    dists = [[cosine(e2,e1) for e2 in embeddings] for e1 in embeddings]
     return dists
 
 def get_top3_predictions(dist, labels):
