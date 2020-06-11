@@ -1,5 +1,7 @@
 pandas
 sklearn
+torch
+torchvision
 facenet_pytorch
 git+https://github.com/JohannesZahn/keras-vggface.git
 tensorflow

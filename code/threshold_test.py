@@ -2,12 +2,13 @@ import unittest
 
 from DataLoader import DataLoader
 from main import extrac_all_faces_from_all_albums
+from src.FaceRecogniser.ResNet34.ResNet34_A2 import get_ResNet_embeddings
 from src.FaceRecogniser.VGG2.vgg2 import get_vgg_embeddings
 from src.FaceRecogniser.FaceNet.facenet_A2 import get_faceNet_embeddings
 from src.metrics import dist_matrix_euclid, threshold_metrics, dist_matrix_cosine
 
 
-class Metric_Test(unittest.TestCase):
+class Threshold_Test(unittest.TestCase):
     """
     TODO: Write metric tests for the other networks
     TODO: Implement Clustering Metrics
@@ -48,8 +49,27 @@ class Metric_Test(unittest.TestCase):
 
         dists = dist_matrix_euclid(faceNet_embeddings)
 
-        print('Score for FaceNet')
+        print('Threshold Approach Metrics: FaceNet')
         threshold_metrics(0.2, dists, labels, faceNet_embeddings)
 
+    def test_ResNet34(self):
+        face_paths, labels = DataLoader().load_A2()
+        resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
 
-unittest.main()
+        dists = dist_matrix_euclid(resNet_embeddings)
+
+        print('Threshold Approach Metrics: ResNet34 on A2')
+        threshold_metrics(0.2, dists, labels, resNet_embeddings)
+
+    def test_ResNet34_LFW(self):
+        face_paths, labels, d1, d2 = DataLoader().load_lfw()
+        resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
+
+        dists = dist_matrix_euclid(resNet_embeddings)
+
+        print('Threshold Approach Metrics: ResNet34 on LFW')
+        threshold_metrics(0.2, dists, labels, resNet_embeddings)
+
+
+if __name__=='__main__':
+    unittest.main()

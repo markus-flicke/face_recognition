@@ -1,16 +1,6 @@
-import io
-import IPython
-import PIL
-import pandas as pd
-import os
-import sklearn
 from keras_vggface.vggface import VGGFace
 from keras_vggface import utils
-from scipy.spatial.distance import cosine
-from sklearn.metrics import accuracy_score, recall_score
 import numpy as np
-from src import Config
-import cv2
 from keras.preprocessing import image
 
 face_size = 224
