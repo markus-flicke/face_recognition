@@ -8,12 +8,16 @@ from sklearn import preprocessing
 
 class DataLoader():
 
-    def load_A2(self):
+    def load_A2(self, superResolution=False):
         df = pd.read_csv(os.path.join(Config.ANDREAS_ALBUMS_PATH, 'labels.csv'))
-        return [os.path.join(Config.EXTRACTED_FACES_PATH, filename) for filename in df.values[:, 0]], list(df.values[:, 1])
+        if not superResolution:
+            return [os.path.join(Config.EXTRACTED_FACES_PATH, filename) for filename in df.values[:, 0]], list(
+                df.values[:, 1])
+        else:
+            return [os.path.join(Config.EXTRACTED_FACES_PATH_SR, filename) for filename in df.values[:, 0]], list(
+                df.values[:, 1])
 
-
-    def load_lfw(self, N_train = 100, N_test = 10):
+    def load_lfw(self, N_train=100, N_test=10):
         """
         Loads the lfw dataset with a specified number of training and test samples.
         The resulting data has only images in the test set whose class also appears at least once during training.
@@ -31,10 +35,8 @@ class DataLoader():
             labels.extend([label] * len(folder_filepaths))
             filepaths.extend(folder_filepaths)
 
-
         le = preprocessing.LabelEncoder()
         labels_as_id = le.fit_transform(labels)
-
 
         c = list(zip(filepaths, labels_as_id))
         random.shuffle(c)

@@ -20,6 +20,8 @@ class Threshold_Test(unittest.TestCase):
 
     def test_vgg(self):
         face_paths, labels = DataLoader().load_A2()
+        # Load faces with super resolution
+        # face_paths, labels = DataLoader().load_A2(superResolution=True)
 
         # vgg_embeddings_resnet = get_vgg_embeddings(face_paths,'resnet50')
         #
@@ -44,6 +46,8 @@ class Threshold_Test(unittest.TestCase):
 
     def test_faceNet(self):
         face_paths, labels = DataLoader().load_A2()
+        # Load faces with super resolution
+        # face_paths, labels = DataLoader().load_A2(superResolution=True)
 
         faceNet_embeddings = get_faceNet_embeddings(face_paths, 'vggface2')
 
@@ -54,6 +58,8 @@ class Threshold_Test(unittest.TestCase):
 
     def test_ResNet34(self):
         face_paths, labels = DataLoader().load_A2()
+        # Load faces with super resolution
+        # face_paths, labels = DataLoader().load_A2(superResolution=True)
         resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
 
         dists = dist_matrix_euclid(resNet_embeddings)
@@ -61,14 +67,14 @@ class Threshold_Test(unittest.TestCase):
         print('Threshold Approach Metrics: ResNet34 on A2')
         threshold_metrics(0.2, dists, labels, resNet_embeddings)
 
-    def test_ResNet34_LFW(self):
-        face_paths, labels, d1, d2 = DataLoader().load_lfw()
-        resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
-
-        dists = dist_matrix_euclid(resNet_embeddings)
-
-        print('Threshold Approach Metrics: ResNet34 on LFW')
-        threshold_metrics(0.2, dists, labels, resNet_embeddings)
+    # def test_ResNet34_LFW(self):
+    #     face_paths, labels, d1, d2 = DataLoader().load_lfw()
+    #     resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
+    #
+    #     dists = dist_matrix_euclid(resNet_embeddings)
+    #
+    #     print('Threshold Approach Metrics: ResNet34 on LFW')
+    #     threshold_metrics(0.2, dists, labels, resNet_embeddings)
 
 
 if __name__=='__main__':

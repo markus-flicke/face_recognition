@@ -1,7 +1,8 @@
 from src.FaceRecogniser.FaceNet.utils import *
+from src.image_preprocessing import *
+
 import torch
 import cv2
-
 import numpy as np
 import os
 
@@ -49,6 +50,8 @@ def get_faceNet_embeddings(face_paths, model_type):
         # resize Image
         face_dim = (faceSize, faceSize)
         resized_face = cv2.resize(face, dsize=face_dim, interpolation=cv2.INTER_CUBIC)
+        # Test for contrast enhancement
+        # resized_face = contrast_enhancement(resized_face)
         face_list.append(resized_face)
 
     # FaceNet

@@ -1,5 +1,6 @@
 import numpy as np
 import face_recognition
+from src.image_preprocessing import *
 
 
 def get_ResNet_embeddings(filepaths, labels):
@@ -9,6 +10,8 @@ def get_ResNet_embeddings(filepaths, labels):
     X = np.zeros((len(filepaths), 128))
     for i, filepath in enumerate(filepaths):
         img = face_recognition.load_image_file(filepath)
+        # Test for contrast enhancement
+        # img = contrast_enhancement(img)
         encodings = face_recognition.face_encodings(img)
         # ToDo: Some cropped images won't look like a face to ReseNet-34
         if not encodings:

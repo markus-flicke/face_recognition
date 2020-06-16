@@ -1,0 +1,57 @@
+2020-06-16_0750:
+  discriminator:
+    name: srgan-large
+    weights_discriminator: null
+  feature_extractor:
+    layers:
+    - 5
+    - 9
+    name: vgg19
+  generator:
+    name: rrdn
+    parameters:
+      C: 4
+      D: 3
+      G: 64
+      G0: 64
+      T: 10
+      x: 2
+    weights_generator: null
+  training_parameters:
+    adam_optimizer:
+      beta1: 0.9
+      beta2: 0.999
+      epsilon: null
+    batch_size: 2
+    dataname: image_dataset
+    fallback_save_every_n_epochs: 2
+    flatness:
+      increase: 0.01
+      increase_frequency: 5
+      max: 0.15
+      min: 0.0
+    hr_train_dir: dat/LFW/train/high_res
+    hr_valid_dir: dat/LFW/valid/high_res
+    learning_rate:
+      decay_factor: 0.5
+      decay_frequency: 30
+      initial_value: 0.0004
+    log_dirs:
+      logs: ./logs
+      weights: ./weights
+    loss_weights:
+      discriminator: 0.01
+      feature_extractor: 0.0833
+      generator: 0.0
+    losses:
+      discriminator: binary_crossentropy
+      feature_extractor: mse
+      generator: mae
+    lr_patch_size: 64
+    lr_train_dir: dat/LFW/train/low_res
+    lr_valid_dir: dat/LFW/valid/low_res
+    metrics:
+      generator: !!python/name:ISR.utils.metrics.PSNR_Y ''
+    n_validation: 40
+    starting_epoch: 0
+    steps_per_epoch: 70

@@ -2,6 +2,7 @@ from keras_vggface.vggface import VGGFace
 from keras_vggface import utils
 import numpy as np
 from keras.preprocessing import image
+from src.image_preprocessing import *
 
 face_size = 224
 
@@ -22,6 +23,8 @@ def get_vgg_embeddings(face_paths, model):
         face = image.img_to_array(face)
         face = np.expand_dims(face, axis=0)
         face = utils.preprocess_input(face, version=2)  # or version=2
+        # Test for contrast enhancement
+        # face = contrast_enhancement(face)
         # face = cv2.imread(face_path)
         # resize Image
         # face_dim = (face_size, face_size)
