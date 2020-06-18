@@ -1,13 +1,11 @@
 import unittest
 
-from DataLoader import DataLoader
-from main import extrac_all_faces_from_all_albums
+from src.DataLoader import DataLoader
 from src.FaceRecogniser.ResNet34.ResNet34_A2 import get_ResNet_embeddings
 from src.FaceRecogniser.VGG2.vgg2 import get_vgg_embeddings
 from src.FaceRecogniser.FaceNet.facenet_A2 import get_faceNet_embeddings
-from src.metrics import dist_matrix_euclid, threshold_metrics, dist_matrix_cosine, get_best_threshold, compute_tpr_fpr
-import numpy as np
-import matplotlib.pyplot as plt
+from src.Test.metrics import dist_matrix_euclid, threshold_metrics, dist_matrix_cosine, get_best_threshold
+
 
 class Threshold_Test(unittest.TestCase):
 

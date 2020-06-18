@@ -1,7 +1,7 @@
 import unittest
 
-from DataLoader import DataLoader
-from clustering import cluster_predictions, evaluate_clustering, evaluate_best_threshold
+from src.DataLoader import DataLoader
+from src.FaceRecogniser.clustering import cluster_predictions, evaluate_clustering, evaluate_best_threshold
 from src.FaceRecogniser.FaceNet.facenet_A2 import get_faceNet_embeddings
 from src.FaceRecogniser.ResNet34.ResNet34_A2 import get_ResNet_embeddings
 from src.FaceRecogniser.VGG2.vgg2 import get_vgg_embeddings
@@ -44,6 +44,6 @@ class ClusteringTest(unittest.TestCase):
         vgg_embeddings = get_vgg_embeddings(face_paths, 'senet50')
         best_threshold, best_f1 = evaluate_best_threshold(vgg_embeddings, labels, 'cosine')
         print(best_threshold)
-        predictions = cluster_predictions(vgg_embeddings, 0.336, 1, 'cosine')
+        predictions = cluster_predictions(vgg_embeddings, best_threshold, 1, 'cosine')
         print('Clustering Metrics: VGG2 on LFW')
         evaluate_clustering(labels, predictions)
