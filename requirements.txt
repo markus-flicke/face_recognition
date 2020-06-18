@@ -6,3 +6,5 @@ facenet_pytorch
 git+https://github.com/JohannesZahn/keras-vggface.git
 tensorflow
 keras == 2.2.4
+CMake
+face_recognition

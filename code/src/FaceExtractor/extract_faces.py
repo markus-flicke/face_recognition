@@ -8,7 +8,7 @@ class NoImageReadException(Exception):
     "If a file in the photos path cannot be read"
 
 
-def extract_faces(photo_filepath, out_dir=Config.EXTRACTED_FACES_PATH):
+def extract_faces(photo_filepath, out_dir=Config.A2_EXTRACTED_FACES_PATH):
     """
     Crops all faces on a png photo and saves them to individual png files.
     :param photo_filepath:
@@ -63,6 +63,6 @@ def _get_detected_faces(img, frontal_classifier, profile_classifier, out_path, n
 
 if __name__ == '__main__':
     Config.setup_logging()
-    for in_filename in os.listdir(Config.EXTRACTED_PHOTOS_PATH):
+    for in_filename in os.listdir(Config.A2_EXTRACTED_PHOTOS_PATH):
         if not in_filename.endswith('.png'): continue
-        extract_faces(os.path.join(Config.EXTRACTED_PHOTOS_PATH, in_filename))
+        extract_faces(os.path.join(Config.A2_EXTRACTED_PHOTOS_PATH, in_filename))

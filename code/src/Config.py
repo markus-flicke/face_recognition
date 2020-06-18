@@ -9,11 +9,11 @@ FACE_FRONTAL_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'c
 FACE_PROFILE_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'classifiers',
                                                       'haarcascade_profileface.xml')
 ANDREAS_ALBUMS_PATH = os.path.join('dat', 'AndreasAlbums')
-ALBUM2_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'A2')
-LABELS_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'labels.csv')
+A2_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'A2')
+A2_LABELS_PATH = os.path.join(A2_PATH, 'labels.csv')
 
-EXTRACTED_FACES_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_faces')
-EXTRACTED_PHOTOS_PATH = os.path.join(ANDREAS_ALBUMS_PATH, 'extracted_photos')
+A2_EXTRACTED_FACES_PATH = os.path.join(A2_PATH, 'extracted_faces')
+A2_EXTRACTED_PHOTOS_PATH = os.path.join(A2_PATH, 'extracted_photos')
 
 LFW_PATH = os.path.join('dat', 'lfw')
 
@@ -36,8 +36,8 @@ def setup_logging(logfile=os.path.join('log', 'face_recoginition.log')):
 
 def create_directories():
     os.makedirs(ANDREAS_ALBUMS_PATH, exist_ok=True)
-    os.makedirs(ALBUM2_PATH, exist_ok=True)
-    os.makedirs(EXTRACTED_FACES_PATH, exist_ok=True)
-    os.makedirs(EXTRACTED_PHOTOS_PATH, exist_ok=True)
+    os.makedirs(A2_PATH, exist_ok=True)
+    os.makedirs(A2_EXTRACTED_FACES_PATH, exist_ok=True)
+    os.makedirs(A2_EXTRACTED_PHOTOS_PATH, exist_ok=True)
 
 create_directories()

@@ -9,8 +9,8 @@ from sklearn import preprocessing
 class DataLoader():
 
     def load_A2(self):
-        df = pd.read_csv(os.path.join(Config.ANDREAS_ALBUMS_PATH, 'A2', 'labels.csv'))
-        return [os.path.join(Config.EXTRACTED_FACES_PATH, filename) for filename in df.values[:, 0]], list(df.values[:, 1])
+        df = pd.read_csv(os.path.join(Config.A2_LABELS_PATH))
+        return [os.path.join(Config.A2_EXTRACTED_FACES_PATH, filename) for filename in df.values[:, 0]], list(df.values[:, 1])
 
 
     def load_lfw(self, N_train = 100, N_test = 10):

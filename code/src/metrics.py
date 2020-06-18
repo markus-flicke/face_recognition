@@ -2,9 +2,8 @@ from operator import itemgetter
 import numpy as np
 from scipy.spatial.distance import cosine
 
-def threshold_metrics(dist_thresh, dist_matrix, labels, embeddings):
+def threshold_metrics(dist_thresh, dist_matrix, labels, embeddings, verbose = True):
     classes = np.sort(list(dict.fromkeys(labels)))
-
 
     # Bestimmen von Accuracy, Precision, Recall und F1 aus der Confusion-Matrix
     tp, fp, fn, tn = confusion_matrix(dist_thresh, embeddings, classes, labels, dist_matrix)
@@ -15,15 +14,30 @@ def threshold_metrics(dist_thresh, dist_matrix, labels, embeddings):
     recall = np.nanmean(np.array(list(recalls.values())))
     f1 = 0 if (precision + recall) == 0 else 2 * (precision * recall) / (precision + recall)
 
-    print('Accuracy {:.2f}'.format(accuracy))
-    print('Precision {:.2f}'.format(precision))
-    print('Recall {:.2f}'.format(recall))
-    print('F1-Score {:.2f}'.format(f1))
+    if verbose:
+        print('Accuracy {:.2f}'.format(accuracy))
+        print('Precision {:.2f}'.format(precision))
+        print('Recall {:.2f}'.format(recall))
+        print('F1-Score {:.2f}'.format(f1))
+    return accuracy,precision, recall, f1
 
 
 def dist_matrix_euclid(embeddings):
     dists = [[(np.linalg.norm(e1 - e2) ** 2) for e2 in embeddings] for e1 in embeddings]
     return dists
+
+
+def get_best_threshold(dist_mat, labels, embeddings):
+    best_f1 = 0
+    best_threshold = 0
+    for i in range(1, 1000):
+        threshold = i * 0.001
+        accuracy, precision, recall, f1 = threshold_metrics(threshold, dist_mat, labels,
+                                                            embeddings, False)
+        if f1 > best_f1:
+            best_f1 = f1
+            best_threshold = threshold
+    return best_threshold
 
 def dist_matrix_cosine(embeddings):
     dists = [[cosine(e2,e1) for e2 in embeddings] for e1 in embeddings]
@@ -116,10 +130,9 @@ def classification_metrics(tp, fp, fn, tn, classes):
     precicions = accuracies.copy()
     recalls = accuracies.copy()
     for key in accuracies:
-        accuracies[key] = (tp[key] + tn[key]) / (fp[key] + fn[key] + tp[key] + tn[key])
-        precicions[key] = tp[key] / (tp[key] + fp[key])
-        recalls[key] = tp[key] / (tp[key] + fn[key])
-
+        accuracies[key] = (tp[key] + tn[key]) / (fp[key] + fn[key] + tp[key] + tn[key]) if (fp[key] + fn[key] + tp[key] + tn[key]) != 0 else 0
+        precicions[key] = tp[key] / (tp[key] + fp[key]) if (tp[key] + fp[key]) != 0 else 0
+        recalls[key] = tp[key] / (tp[key] + fn[key]) if (tp[key] + fn[key]) != 0 else 0
     return accuracies, precicions, recalls
 
 
@@ -137,9 +150,9 @@ def compute_tpr_fpr(thresh, classes, embeddings, names, dists):
     for t in thresh:
         tp, fp, fn, tn = confusion_matrix(t, embeddings, classes, names, dists)
         for key in tpr:
-            tpr[key] = tp[key] / (tp[key] + fn[key])
+            tpr[key] = tp[key] / (tp[key] + fn[key]) if (tp[key] + fn[key])!=0 else 0
             tprs.append(np.nanmean(np.array(list(tpr.values()))))
-            fpr[key] = fp[key] / (fp[key] + tn[key])
+            fpr[key] = fp[key] / (fp[key] + tn[key]) if (fp[key] + tn[key]) != 0 else 0
             fprs.append(np.nanmean(np.array(list(fpr.values()))))
 
     return tprs, fprs

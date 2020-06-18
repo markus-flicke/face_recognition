@@ -9,3 +9,9 @@ code/dat/*
 *.iml
 *.log
 .idea/misc.xml
+code/src/FaceRecogniser/__pycache__/recognise_lbp_hog.cpython-37.pyc
+code/src/FaceRecogniser/__pycache__/train_opencv_classifier.cpython-37.pyc
+code/src/FotoExtractor/__pycache__/backgroundremover.cpython-37.pyc
+code/src/FotoExtractor/__pycache__/extract_images.cpython-37.pyc
+code/src/FotoExtractor/__pycache__/rectextract.cpython-37.pyc
+code/src/__pycache__/Config.cpython-37.pyc

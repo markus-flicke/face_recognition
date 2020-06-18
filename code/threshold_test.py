@@ -5,42 +5,38 @@ from main import extrac_all_faces_from_all_albums
 from src.FaceRecogniser.ResNet34.ResNet34_A2 import get_ResNet_embeddings
 from src.FaceRecogniser.VGG2.vgg2 import get_vgg_embeddings
 from src.FaceRecogniser.FaceNet.facenet_A2 import get_faceNet_embeddings
-from src.metrics import dist_matrix_euclid, threshold_metrics, dist_matrix_cosine
-
+from src.metrics import dist_matrix_euclid, threshold_metrics, dist_matrix_cosine, get_best_threshold, compute_tpr_fpr
+import numpy as np
+import matplotlib.pyplot as plt
 
 class Threshold_Test(unittest.TestCase):
-    """
-    TODO: Write metric tests for the other networks
-    TODO: Implement Clustering Metrics
-    """
 
     def setUp(self):
         # extrac_all_faces_from_all_albums()
         pass
 
-    def test_vgg(self):
+    def test_vgg_A2(self):
         face_paths, labels = DataLoader().load_A2()
-
-        # vgg_embeddings_resnet = get_vgg_embeddings(face_paths,'resnet50')
-        #
-        # # TODO: same procedure to get embeddings with the other networks
-        #
-        # dists_res = dist_matrix_euclid(vgg_embeddings_resnet)
-        #
-        # print('\nScore for VGG Resnet\n')
-        # threshold_metrics(900, dists_res, labels, vgg_embeddings_resnet)
-
         vgg_embeddings_senet = get_vgg_embeddings(face_paths, 'senet50')
 
-        # dists_senet = dist_matrix_euclid(vgg_embeddings_senet)
-
-        # print('\nScore for VGG Senet\n')
-
-        # threshold_metrics(4400, dists_senet, labels, vgg_embeddings_senet)
-
-        print('\nScore for VGG Senet cosine\n')
         dists_senet_cos = dist_matrix_cosine(vgg_embeddings_senet)
-        threshold_metrics(0.05, dists_senet_cos, labels, vgg_embeddings_senet)
+        best_threshold = get_best_threshold(dists_senet_cos, labels, vgg_embeddings_senet)
+        print('\nScore for VGG Senet cosine\n')
+        threshold_metrics(best_threshold, dists_senet_cos, labels,
+                          vgg_embeddings_senet, True)
+        # classes = np.sort(list(dict.fromkeys(labels)))
+        # tpr, fpr = compute_tpr_fpr(np.linspace(0,1,1000),classes, vgg_embeddings_senet, labels, dists_senet_cos)
+        # plt.plot(fpr, tpr)
+        # plt.show()
+
+    def test_vgg_LFW(self):
+        face_paths, labels, d1, d2 = DataLoader().load_lfw()
+        vgg_embeddings_senet = get_vgg_embeddings(face_paths, 'senet50')
+        dists_senet_cos = dist_matrix_cosine(vgg_embeddings_senet)
+        best_threshold = get_best_threshold(dists_senet_cos, labels, vgg_embeddings_senet)
+        print('\nScore for VGG Senet cosine\n')
+        threshold_metrics(best_threshold, dists_senet_cos, labels,
+                          vgg_embeddings_senet, True)
 
     def test_faceNet(self):
         face_paths, labels = DataLoader().load_A2()
@@ -69,7 +65,3 @@ class Threshold_Test(unittest.TestCase):
 
         print('Threshold Approach Metrics: ResNet34 on LFW')
         threshold_metrics(0.2, dists, labels, resNet_embeddings)
-
-
-if __name__=='__main__':
-    unittest.main()
