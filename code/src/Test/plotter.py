@@ -21,7 +21,6 @@ def plotPredictions(predictions, face_paths, min_cluster_size = 2, max_images_pe
                 img = cv2.imread(face_paths[image_indice])
                 ax.append(fig.add_subplot(rows, columns, i + 1))
                 curr_ax = ax[-1]
-                curr_ax.set_title("Cluster: " + str(label) + ", Image: " + str(i))
                 curr_ax.set_xticks([])
                 curr_ax.set_yticks([])
                 plt.imshow(img)
