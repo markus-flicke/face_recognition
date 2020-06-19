@@ -36,15 +36,23 @@ class Threshold_Test(unittest.TestCase):
         threshold_metrics(best_threshold, dists_senet_cos, labels,
                           vgg_embeddings_senet, True)
 
-    def test_faceNet(self):
+    def test_faceNet_A2(self):
         face_paths, labels = DataLoader().load_A2()
-
-        faceNet_embeddings = get_faceNet_embeddings(face_paths, 'vggface2')
-
-        dists = dist_matrix_euclid(faceNet_embeddings)
-
+        faceNet_embeddings = get_faceNet_embeddings(face_paths, 'casia-webface')
+        dists = dist_matrix_cosine(faceNet_embeddings)
+        best_threshold = get_best_threshold(dists, labels, faceNet_embeddings)
+        print('Best threshold is {}'.format(str(best_threshold)))
         print('Threshold Approach Metrics: FaceNet')
-        threshold_metrics(0.2, dists, labels, faceNet_embeddings)
+        threshold_metrics(best_threshold, dists, labels, faceNet_embeddings)
+
+    def test_faceNet_LFW(self):
+        face_paths, labels, d1, d2 = DataLoader().load_lfw()
+        faceNet_embeddings = get_faceNet_embeddings(face_paths, 'casia-webface')
+        dists = dist_matrix_cosine(faceNet_embeddings)
+        best_threshold = get_best_threshold(dists, labels, faceNet_embeddings)
+        print('Best threshold is {}'.format(str(best_threshold)))
+        print('Threshold Approach Metrics: FaceNet')
+        threshold_metrics(best_threshold, dists, labels, faceNet_embeddings)
 
     def test_ResNet34(self):
         face_paths, labels = DataLoader().load_A2()

@@ -10,10 +10,21 @@ import src.Test.plotter as plotter
 
 class ClusteringTest(unittest.TestCase):
 
-    def test_faceNet(self):
+    def test_faceNet_A2(self):
         face_paths, labels = DataLoader().load_A2()
+        faceNet_embeddings = get_faceNet_embeddings(face_paths, 'casia-webface')
+        best_threshold, best_f1 = evaluate_best_threshold(faceNet_embeddings, labels, 'cosine')
+        predictions = cluster_predictions(faceNet_embeddings, best_threshold, 1, 'cosine')
+        plotter.plotPredictions(predictions, face_paths, max_images_per_plot=20)
+        print('Clustering Metrics: FaceNet')
+        evaluate_clustering(labels, predictions)
+
+    def test_faceNet_LFW(self):
+        face_paths, labels, d1, d2 = DataLoader().load_lfw()
         faceNet_embeddings = get_faceNet_embeddings(face_paths, 'vggface2')
-        predictions = cluster_predictions(faceNet_embeddings)
+        best_threshold, best_f1 = evaluate_best_threshold(faceNet_embeddings, labels, 'cosine')
+        predictions = cluster_predictions(faceNet_embeddings, best_threshold, 2, 'cosine')
+        plotter.plotPredictions(predictions, face_paths, max_images_per_plot=10)
         print('Clustering Metrics: FaceNet')
         evaluate_clustering(labels, predictions)
 
