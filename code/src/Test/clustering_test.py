@@ -38,7 +38,8 @@ class ClusteringTest(unittest.TestCase):
     def test_resnet_LFW(self):
         face_paths, labels, d1, d2 = DataLoader().load_lfw()
         resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
-        predictions = cluster_predictions(resNet_embeddings)
+        best_threshold, best_f1 = evaluate_best_threshold(resNet_embeddings, labels, 'cosine')
+        predictions = cluster_predictions(resNet_embeddings,best_threshold,1,'cosine')
         print('Clustering Metrics: ResNet34 on LFW')
         evaluate_clustering(labels, predictions)
 
