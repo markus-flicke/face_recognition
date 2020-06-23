@@ -44,9 +44,9 @@ class ClusteringTest(unittest.TestCase):
 
     def test_vgg_A2(self):
         face_paths, labels = DataLoader().load_A2()
-        vgg_embeddings = get_vgg_embeddings(face_paths, 'senet50')
-        best_threshold = 0.2
-        predictions = cluster_predictions(vgg_embeddings,best_threshold,1,'cosine')
+        vgg_embeddings = get_vgg_embeddings(face_paths, 'resnet50')
+        best_threshold = 0.3
+        predictions = cluster_predictions(vgg_embeddings,best_threshold,3,'cosine')
         plotter.plotPredictions(predictions, face_paths)
         print('Clustering Metrics: VGG2 on A2')
         evaluate_clustering(labels, predictions)

@@ -130,9 +130,9 @@ def classification_metrics(tp, fp, fn, tn, classes):
     precicions = accuracies.copy()
     recalls = accuracies.copy()
     for key in accuracies:
-        accuracies[key] = (tp[key] + tn[key]) / (fp[key] + fn[key] + tp[key] + tn[key]) if (fp[key] + fn[key] + tp[key] + tn[key]) != 0 else 0
-        precicions[key] = tp[key] / (tp[key] + fp[key]) if (tp[key] + fp[key]) != 0 else 0
-        recalls[key] = tp[key] / (tp[key] + fn[key]) if (tp[key] + fn[key]) != 0 else 0
+        accuracies[key] = (tp[key] + tn[key]) / (fp[key] + fn[key] + tp[key] + tn[key])
+        precicions[key] = tp[key] / (tp[key] + fp[key])
+        recalls[key] = tp[key] / (tp[key] + fn[key])
     return accuracies, precicions, recalls
 
 
@@ -150,9 +150,9 @@ def compute_tpr_fpr(thresh, classes, embeddings, names, dists):
     for t in thresh:
         tp, fp, fn, tn = confusion_matrix(t, embeddings, classes, names, dists)
         for key in tpr:
-            tpr[key] = tp[key] / (tp[key] + fn[key]) if (tp[key] + fn[key])!=0 else 0
+            tpr[key] = tp[key] / (tp[key] + fn[key])
             tprs.append(np.nanmean(np.array(list(tpr.values()))))
-            fpr[key] = fp[key] / (fp[key] + tn[key]) if (fp[key] + tn[key]) != 0 else 0
+            fpr[key] = fp[key] / (fp[key] + tn[key])
             fprs.append(np.nanmean(np.array(list(fpr.values()))))
 
     return tprs, fprs
