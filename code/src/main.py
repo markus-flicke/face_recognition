@@ -12,17 +12,17 @@ def extrac_all_faces_from_all_albums():
     """
     Config.setup_logging()
     # Extract images from album pages
-    in_path = Config.A2_PATH
-    out_path = Config.A2_EXTRACTED_PHOTOS_PATH
+    in_path = Config.A1_PATH
+    out_path = Config.A1_EXTRACTED_PHOTOS_PATH
     for album_page in os.listdir(in_path):
         try:
             extract_images(os.path.join(in_path, album_page), out_path)
         except ExtractionException:
             continue
     # Extract faces from images
-    for in_filename in os.listdir(Config.A2_EXTRACTED_PHOTOS_PATH):
+    for in_filename in os.listdir(Config.A1_EXTRACTED_PHOTOS_PATH):
         if not in_filename.endswith('.png'): continue
-        extract_faces(os.path.join(Config.A2_EXTRACTED_PHOTOS_PATH, in_filename))
+        extract_faces(os.path.join(Config.A1_EXTRACTED_PHOTOS_PATH, in_filename))
 
 
 if __name__ == '__main__':
