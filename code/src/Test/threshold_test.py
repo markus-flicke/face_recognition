@@ -19,7 +19,7 @@ class Threshold_Test(unittest.TestCase):
 
         dists_senet_cos = dist_matrix_cosine(vgg_embeddings_senet)
         best_threshold = get_best_threshold(dists_senet_cos, labels, vgg_embeddings_senet)
-        print('\nScore for VGG Senet cosine\n')
+        print('\nFace Verification Metrics: VGG2 on A2\n')
         threshold_metrics(best_threshold, dists_senet_cos, labels,
                           vgg_embeddings_senet, True)
         # classes = np.sort(list(dict.fromkeys(labels)))
@@ -32,7 +32,7 @@ class Threshold_Test(unittest.TestCase):
         vgg_embeddings_senet = get_vgg_embeddings(face_paths, 'senet50')
         dists_senet_cos = dist_matrix_cosine(vgg_embeddings_senet)
         best_threshold = get_best_threshold(dists_senet_cos, labels, vgg_embeddings_senet)
-        print('\nScore for VGG Senet cosine\n')
+        print('\nFace Verification Metrics: VGG2 on LFW\n')
         threshold_metrics(best_threshold, dists_senet_cos, labels,
                           vgg_embeddings_senet, True)
 
@@ -42,7 +42,7 @@ class Threshold_Test(unittest.TestCase):
         dists = dist_matrix_cosine(faceNet_embeddings)
         best_threshold = get_best_threshold(dists, labels, faceNet_embeddings)
         print('Best threshold is {}'.format(str(best_threshold)))
-        print('Threshold Approach Metrics: FaceNet')
+        print('\nFace Verification Metrics: FaceNet on A2\n')
         threshold_metrics(best_threshold, dists, labels, faceNet_embeddings)
 
     def test_faceNet_LFW(self):
@@ -51,23 +51,23 @@ class Threshold_Test(unittest.TestCase):
         dists = dist_matrix_cosine(faceNet_embeddings)
         best_threshold = get_best_threshold(dists, labels, faceNet_embeddings)
         print('Best threshold is {}'.format(str(best_threshold)))
-        print('Threshold Approach Metrics: FaceNet')
+        print('\nFace Verification Metrics: FaceNet on LFW\n')
         threshold_metrics(best_threshold, dists, labels, faceNet_embeddings)
 
-    def test_ResNet34(self):
+    def test_ResNet34_A2(self):
         face_paths, labels = DataLoader().load_A2()
-        resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
+        resNet_embeddings, labels, face_paths = get_ResNet_embeddings(face_paths, labels)
 
         dists = dist_matrix_euclid(resNet_embeddings)
-
-        print('Threshold Approach Metrics: ResNet34 on A2')
-        threshold_metrics(0.2, dists, labels, resNet_embeddings)
+        best_threshold = get_best_threshold(dists, labels, resNet_embeddings)
+        print('\nFace Verification Metrics: ResNet34 on A2\n')
+        threshold_metrics(best_threshold, dists, labels, resNet_embeddings)
 
     def test_ResNet34_LFW(self):
         face_paths, labels, d1, d2 = DataLoader().load_lfw()
-        resNet_embeddings, labels = get_ResNet_embeddings(face_paths, labels)
+        resNet_embeddings, labels, face_paths = get_ResNet_embeddings(face_paths, labels)
 
         dists = dist_matrix_euclid(resNet_embeddings)
-
-        print('Threshold Approach Metrics: ResNet34 on LFW')
-        threshold_metrics(0.2, dists, labels, resNet_embeddings)
+        best_threshold = get_best_threshold(dists, labels, resNet_embeddings)
+        print('\nFace Verification Metrics: ResNet34 on LFW\n')
+        threshold_metrics(best_threshold, dists, labels, resNet_embeddings)
