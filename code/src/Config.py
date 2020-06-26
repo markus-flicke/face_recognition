@@ -3,7 +3,6 @@ import logging
 # Face Extractor
 import sys
 
-
 FACE_FRONTAL_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'classifiers',
                                                       'haarcascade_frontalface.xml')
 FACE_PROFILE_EXTRACTOR_CLASSIFIER_PATH = os.path.join('src', 'FaceExtractor', 'classifiers',
@@ -19,6 +18,7 @@ A1_EXTRACTED_FACES_PATH = os.path.join(A1_PATH, 'extracted_faces')
 A1_EXTRACTED_PHOTOS_PATH = os.path.join(A1_PATH, 'extracted_photos')
 
 LFW_PATH = os.path.join('dat', 'lfw')
+LFW_LOW_RES_PATH = os.path.join('dat', 'lfw_low_res')
 
 
 # Logging configuration setup
@@ -44,5 +44,6 @@ def create_directories():
     os.makedirs(A2_EXTRACTED_PHOTOS_PATH, exist_ok=True)
     os.makedirs(A1_EXTRACTED_FACES_PATH, exist_ok=True)
     os.makedirs(A1_EXTRACTED_PHOTOS_PATH, exist_ok=True)
+
 
 create_directories()
