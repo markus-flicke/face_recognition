@@ -20,6 +20,8 @@ A1_EXTRACTED_PHOTOS_PATH = os.path.join(A1_PATH, 'extracted_photos')
 LFW_PATH = os.path.join('dat', 'lfw')
 LFW_LOW_RES_PATH = os.path.join('dat', 'lfw_low_res')
 
+extracted_faces_path = 'extracted_faces'
+extracted_photos_path = 'extracted_photos'
 
 # Logging configuration setup
 def setup_logging(logfile=os.path.join('log', 'face_recoginition.log')):

@@ -15,11 +15,14 @@ def predictVGG(face_images, model):
 
 def get_vgg_embeddings(face_paths, model):
     face_list = []
+    face_imgs = []
+
     # prepare faces for prediction
     for idx, face_path in enumerate(face_paths):
         # read image
         face = image.load_img(face_path, target_size=(face_size, face_size))
         face = image.img_to_array(face)
+        face_imgs.append(face)
         face = np.expand_dims(face, axis=0)
         face = utils.preprocess_input(face, version=2)  # or version=2
         # face = cv2.imread(face_path)
@@ -31,7 +34,7 @@ def get_vgg_embeddings(face_paths, model):
     # VGG
     vgg_embeddings = predictVGG(face_list, model)  # returns embeddings as ndarray of shape (imageCount, embeddingSize)
 
-    return vgg_embeddings
+    return face_imgs, vgg_embeddings
 
 # %%
 
