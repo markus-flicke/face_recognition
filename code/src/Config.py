@@ -19,6 +19,10 @@ A1_EXTRACTED_PHOTOS_PATH = os.path.join(A1_PATH, 'extracted_photos')
 
 LFW_PATH = os.path.join('dat', 'lfw')
 LFW_LOW_RES_PATH = os.path.join('dat', 'lfw_low_res')
+LFW_LOW_RES_PATH_step_1 = os.path.join('dat', 'lfw_low_res_1')
+LFW_LOW_RES_PATH_step_2 = os.path.join('dat', 'lfw_low_res_2')
+LFW_LOW_RES_PATH_step_3 = os.path.join('dat', 'lfw_low_res_3')
+LFW_LOW_RES_PATH_step_4 = os.path.join('dat', 'lfw_low_res_4')
 
 extracted_faces_path = 'extracted_faces'
 extracted_photos_path = 'extracted_photos'

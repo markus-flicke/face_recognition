@@ -13,7 +13,7 @@ class DataLoader():
         return [os.path.join(Config.A2_EXTRACTED_FACES_PATH, filename) for filename in df.values[:, 0]], list(
             df.values[:, 1])
 
-    def load_lfw(self, N_train=100, N_test=10):
+    def load_lfw(self, N_train=100, N_test=10, lfw_type=Config.LFW_PATH):
         """
         Loads the lfw dataset with a specified number of training and test samples.
         The resulting data has only images in the test set whose class also appears at least once during training.
@@ -24,9 +24,9 @@ class DataLoader():
         filepaths = []
         labels = []
 
-        for label in os.listdir(Config.LFW_PATH):
-            folder_filenames = os.listdir(os.path.join(Config.LFW_PATH, label, 'extracted_faces'))
-            folder_filepaths = [os.path.join(Config.LFW_PATH, label, 'extracted_faces', filename) for filename in
+        for label in os.listdir(lfw_type):
+            folder_filenames = os.listdir(os.path.join(lfw_type, label, 'extracted_faces'))
+            folder_filepaths = [os.path.join(lfw_type, label, 'extracted_faces', filename) for filename in
                                 folder_filenames]
             labels.extend([label] * len(folder_filepaths))
             filepaths.extend(folder_filepaths)
