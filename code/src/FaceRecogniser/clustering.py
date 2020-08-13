@@ -1,4 +1,5 @@
 from sklearn.cluster import DBSCAN
+import numpy as np
 
 
 def evaluate_best_threshold(embeddings, labels, metric):
@@ -15,12 +16,33 @@ def evaluate_best_threshold(embeddings, labels, metric):
     return best_threshold, best_f1
 
 
+def get_closest_clusters(embeddings, clusters):
+    cluster_means = get_cluster_means(embeddings, clusters)
+    ## computes list of closest clusters based on cluster indices
+    result = []
+    for idx1, cluster_mean1 in enumerate(cluster_means):
+        closest_dist = None
+        closest_indice = None
+        for idx2, cluster_mean2 in enumerate(cluster_means):
+            dist = np.linalg.norm(cluster_mean2 - cluster_mean1)
+            if idx1 != idx2 and (closest_dist == None or closest_dist>dist):
+                closest_indice = idx2
+                closest_dist = dist
+        result.append(closest_indice)
+    return result
 
 
 def cluster_predictions(feature_vectors, max_dist=0.3, min_samples=1, metric='euclidean'):
     clt = DBSCAN(eps=max_dist, min_samples=min_samples, metric=metric)
     return clt.fit_predict(feature_vectors)
 
+def get_cluster_means(embeddings, clusters):
+    result = []
+    for i in range(0, np.amax(clusters)+1):
+        cluster_embedding_indices = np.where(clusters == i)
+        cluster_embeddings = embeddings[cluster_embedding_indices]
+        result.append(np.mean(cluster_embeddings))
+    return result
 
 def jaccard(tp, fp, fn):
     return tp / (tp + fp + fn)

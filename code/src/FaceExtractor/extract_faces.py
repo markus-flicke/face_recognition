@@ -8,6 +8,10 @@ class NoImageReadException(Exception):
     "If a file in the photos path cannot be read"
 
 
+
+
+
+
 def extract_faces(photo_filepath, out_dir=Config.A2_EXTRACTED_FACES_PATH):
     """
     Crops all faces on a png photo and saves them to individual png files.
