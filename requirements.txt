@@ -10,3 +10,4 @@ tensorflow
 keras == 2.2.4
 face_recognition
 opencv-python == 4.2.0.34
+notebook

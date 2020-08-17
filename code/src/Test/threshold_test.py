@@ -58,7 +58,7 @@ class Threshold_Test(unittest.TestCase):
         face_paths, labels = DataLoader().load_A2()
         resNet_embeddings, labels, face_paths = get_ResNet_embeddings(face_paths, labels)
 
-        dists = dist_matrix_euclid(resNet_embeddings)
+        dists = dist_matrix_cosine(resNet_embeddings)
         best_threshold = get_best_threshold(dists, labels, resNet_embeddings)
         print('\nFace Verification Metrics: ResNet34 on A2\n')
         threshold_metrics(best_threshold, dists, labels, resNet_embeddings)
@@ -67,7 +67,7 @@ class Threshold_Test(unittest.TestCase):
         face_paths, labels, d1, d2 = DataLoader().load_lfw()
         resNet_embeddings, labels, face_paths = get_ResNet_embeddings(face_paths, labels)
 
-        dists = dist_matrix_euclid(resNet_embeddings)
+        dists = dist_matrix_cosine(resNet_embeddings)
         best_threshold = get_best_threshold(dists, labels, resNet_embeddings)
         print('\nFace Verification Metrics: ResNet34 on LFW\n')
         threshold_metrics(best_threshold, dists, labels, resNet_embeddings)
