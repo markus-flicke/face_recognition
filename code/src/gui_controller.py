@@ -9,7 +9,7 @@ import numpy as np
 
 def get_clusters(embeddings, threshold):
     threshold = threshold / 100
-    predictions = cluster_predictions(embeddings, threshold, 2, 'cosine')
+    predictions = cluster_predictions(embeddings, threshold, 1, 'cosine')
     predictions_clean = predictions[predictions != -1]
     cluster_count = np.unique(predictions_clean).shape[0]
     avg_imgs_per_cluster = predictions_clean.shape[0] / cluster_count
