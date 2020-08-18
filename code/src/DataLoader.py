@@ -4,6 +4,8 @@ import random
 import pandas as pd
 from src import Config
 from sklearn import preprocessing
+from src.FaceExtractor.extract_faces import extract_faces
+from src.FotoExtractor.extract_images import extract_images, ExtractionException
 
 
 class DataLoader():
@@ -59,3 +61,25 @@ class DataLoader():
         labels_as_id = le.fit_transform(labels)
 
         return filepaths, labels_as_id
+
+    def extract_faces_from_folder(image_folder, isAlbum=True):
+        extracted_faces_path = os.path.join(image_folder, Config.extracted_faces_path)
+        if (isAlbum):
+            extracted_photos_path = os.path.join(image_folder, Config.extracted_photos_path)
+            os.makedirs(extracted_photos_path, exist_ok=True)
+            for album_page in os.listdir(image_folder):
+                if not album_page.endswith('.tif'): continue
+                try:
+                    extract_images(os.path.join(image_folder, album_page), extracted_photos_path)
+                except ExtractionException:
+                    continue
+        else:
+            # if it is not an album but images the photos are already extracted
+            extracted_photos_path = image_folder
+
+        os.makedirs(extracted_faces_path, exist_ok=True)
+        # Extract faces from images
+        for in_filename in os.listdir(extracted_photos_path):
+            if not in_filename.endswith('.png'): continue
+            extract_faces(os.path.join(extracted_photos_path, in_filename),
+                          extracted_faces_path)

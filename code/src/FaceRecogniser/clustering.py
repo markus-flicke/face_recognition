@@ -41,7 +41,8 @@ def get_cluster_means(embeddings, clusters):
     for i in range(0, np.amax(clusters)+1):
         cluster_embedding_indices = np.where(clusters == i)
         cluster_embeddings = embeddings[cluster_embedding_indices]
-        result.append(np.mean(cluster_embeddings))
+        mean = np.mean(cluster_embeddings, axis=0)
+        result.append(mean)
     return result
 
 def jaccard(tp, fp, fn):
@@ -89,3 +90,14 @@ def evaluate_clustering(y, pred, verbose=True):
         print(f'{"True":<12}{tp:<12}{tn:<12}')
         print(f'{"False":<12}{fp:<12}{fn:<12}')
     return tp,fp,fn,tn
+
+def get_clusters(embeddings, threshold, min_cluster_size):
+    threshold = threshold / 100
+    predictions = cluster_predictions(embeddings, threshold, min_cluster_size, 'cosine')
+    predictions_clean = predictions[predictions != -1]
+    cluster_count = np.unique(predictions_clean).shape[0]
+    avg_imgs_per_cluster = 0
+    if (cluster_count!=0):
+        avg_imgs_per_cluster = predictions_clean.shape[0] / cluster_count
+    closest_clusters = get_closest_clusters(embeddings, predictions_clean)
+    return predictions, cluster_count, avg_imgs_per_cluster, closest_clusters

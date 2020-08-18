@@ -1,7 +1,11 @@
+import os
+
 from keras_vggface.vggface import VGGFace
 from keras_vggface import utils
 import numpy as np
 from keras.preprocessing import image
+
+from src import Config
 
 face_size = 224
 
@@ -41,3 +45,11 @@ def get_faces(face_paths):
         processed_faces.append(np.squeeze(face))
     return processed_faces, unprocessed_faces
 
+def get_embeddings_and_paths(folder_path):
+    face_paths = []
+    folder_path = os.path.join(folder_path, Config.extracted_faces_path)
+    for in_filename in os.listdir(folder_path):
+        if not in_filename.endswith('.png'): continue
+        face_paths.append(os.path.join(folder_path, in_filename))
+    vgg_embeddings, face_imgs = get_vgg_embeddings_and_faces(face_paths, 'senet50')
+    return vgg_embeddings, face_paths
