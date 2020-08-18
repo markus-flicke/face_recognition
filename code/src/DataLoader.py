@@ -62,7 +62,7 @@ class DataLoader():
 
         return filepaths, labels_as_id
 
-    def extract_faces_from_folder(image_folder, isAlbum=True):
+    def extract_faces_from_folder(self, image_folder, isAlbum=True):
         extracted_faces_path = os.path.join(image_folder, Config.extracted_faces_path)
         if (isAlbum):
             extracted_photos_path = os.path.join(image_folder, Config.extracted_photos_path)
