@@ -18,4 +18,3 @@ def get_ResNet_embeddings(filepaths, labels):
         X[i] = np.array(encodings)
     print(f'No encodings found for {no_face_c} faces.')
     return X[(X != 0).all(axis = 1)], labels[(X != 0).all(axis = 1)], filepaths[(X != 0).all(axis = 1)]
-
